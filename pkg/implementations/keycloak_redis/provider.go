@@ -24,7 +24,6 @@ type Provider struct {
 	config           *Config
 	redis            *redis.Client
 	validate         *validator.Validate
-	clientId         string
 	endpointSecurity map[string][]string
 	m                *sync.RWMutex
 	logger           *slog.Logger
@@ -34,14 +33,12 @@ func NewProvider(
 	redis *redis.Client,
 	config *Config,
 	validate *validator.Validate,
-	clientID string,
 	logger *slog.Logger,
 ) *Provider {
 	return &Provider{
 		config:           config,
 		redis:            redis,
 		validate:         validate,
-		clientId:         clientID,
 		m:                &sync.RWMutex{},
 		endpointSecurity: make(map[string][]string),
 		logger:           logger,
@@ -82,7 +79,7 @@ func (p *Provider) Authorize(
 
 	var userRoles []string
 	if resourceAccess, ok := claims["resource_access"].(map[string]interface{}); ok {
-		if authClient, ok := resourceAccess[p.clientId].(map[string]interface{}); ok {
+		if authClient, ok := resourceAccess[p.config.ClientId].(map[string]interface{}); ok {
 			if err := mapstructure.Decode(authClient["roles"], &userRoles); err != nil {
 				p.logger.Error("cannot get user roles", slog.String("err", err.Error()))
 				userRoles = []string{}
