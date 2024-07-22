@@ -9,15 +9,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/lestrrat-go/jwx/jwk"
 	"github.com/neiasit/auth-library/pkg/models"
-	"google.golang.org/grpc"
-	"net/http"
 )
-
-type Middleware interface {
-	GrpcUnaryServerInterceptor() grpc.UnaryServerInterceptor
-	GrpcStreamServerInterceptor() grpc.StreamServerInterceptor
-	HttpMiddleware() http.HandlerFunc
-}
 
 type AuthProvider interface {
 	VerifyToken(ctx context.Context, tokenString string) (*jwt.Token, error)
