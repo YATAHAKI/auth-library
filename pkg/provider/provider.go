@@ -1,6 +1,4 @@
-// It's legacy not usable code from this repository - https://github.com/BobrePatre/ProjectTemplate/tree/main/internal/providers/web_auth_provider
-// Use this template to write perfect convenient auth provider library
-// TODO: redesign the authentication provider
+// TODO: write unit tests
 
 package provider
 
