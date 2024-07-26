@@ -1,6 +1,8 @@
 package keycloak_redis
 
-import "github.com/neiasit/auth-library/pkg/utils/helpers"
+import (
+	"github.com/neiasit/auth-library/utils/helpers"
+)
 
 func (p *Provider) IsUserHaveRoles(roles []string, userRoles []string) bool {
 	if len(roles) == 0 {

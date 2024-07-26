@@ -5,8 +5,8 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"github.com/golang-jwt/jwt"
-	"github.com/neiasit/auth-library/pkg/models"
-	"github.com/neiasit/auth-library/pkg/provider"
+	"github.com/neiasit/auth-library/models"
+	"github.com/neiasit/auth-library/provider"
 	"log/slog"
 )
 

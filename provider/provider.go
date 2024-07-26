@@ -6,7 +6,7 @@ import (
 	"context"
 	"github.com/golang-jwt/jwt"
 	"github.com/lestrrat-go/jwx/jwk"
-	"github.com/neiasit/auth-library/pkg/models"
+	"github.com/neiasit/auth-library/models"
 )
 
 type AuthProvider interface {

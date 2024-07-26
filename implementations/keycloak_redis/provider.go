@@ -5,8 +5,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
 	"github.com/mitchellh/mapstructure"
-	"github.com/neiasit/auth-library/pkg/models"
-	"github.com/neiasit/auth-library/pkg/provider"
+	models2 "github.com/neiasit/auth-library/models"
+	"github.com/neiasit/auth-library/provider"
 	"github.com/redis/go-redis/v9"
 	"log/slog"
 	"sync"
@@ -50,31 +50,31 @@ func (p *Provider) Authorize(
 	path string,
 	tokenString string,
 ) (
-	models.UserDetails,
+	models2.UserDetails,
 	error,
 ) {
 	token, err := p.VerifyToken(ctx, tokenString)
 	if err != nil {
 		p.logger.Error("failed to verify token", slog.String("err", err.Error()))
-		return models.UserDetails{}, models.InvalidTokenError
+		return models2.UserDetails{}, models2.InvalidTokenError
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 
 	if !(ok && token.Valid) {
 		p.logger.Error("failed to get claims")
-		return models.UserDetails{}, models.InvalidTokenError
+		return models2.UserDetails{}, models2.InvalidTokenError
 	}
 
 	if claims["sub"] == "" || claims["sub"] == nil {
 		p.logger.Error("failed to validate sub claim")
-		return models.UserDetails{}, models.InvalidTokenError
+		return models2.UserDetails{}, models2.InvalidTokenError
 	}
 
 	err = p.validate.Var(claims["sub"], "uuid4")
 	if err != nil {
 		p.logger.Error("failed to validate sub claim", slog.String("err", err.Error()))
-		return models.UserDetails{}, err
+		return models2.UserDetails{}, err
 	}
 
 	var userRoles []string
@@ -92,7 +92,7 @@ func (p *Provider) Authorize(
 		userEmail = ""
 	}
 
-	userDetails := models.UserDetails{
+	userDetails := models2.UserDetails{
 		Roles:      userRoles,
 		UserId:     claims["sub"].(string),
 		Email:      userEmail,
@@ -108,7 +108,7 @@ func (p *Provider) Authorize(
 	if !p.IsUserHaveRoles(neededRoles, userRoles) {
 		p.logger.Error("user data", slog.Any("userDetails", userDetails))
 		p.logger.Error("user doesn't have needed roles", slog.Any("neededRoles", neededRoles), slog.Any("userRoles", userRoles))
-		return userDetails, models.AccessDeniedError
+		return userDetails, models2.AccessDeniedError
 	}
 
 	return userDetails, nil
