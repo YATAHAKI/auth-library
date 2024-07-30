@@ -4,9 +4,9 @@ package provider
 
 import (
 	"context"
+	"github.com/YATAHAKI/auth-library/models"
 	"github.com/golang-jwt/jwt"
 	"github.com/lestrrat-go/jwx/jwk"
-	"github.com/neiasit/auth-library/models"
 )
 
 type AuthProvider interface {

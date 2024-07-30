@@ -1,6 +1,6 @@
-module github.com/neiasit/auth-library
+module github.com/YATAHAKI/auth-library
 
-go 1.22.5
+go 1.22
 
 require (
 	github.com/go-playground/validator/v10 v10.22.0
