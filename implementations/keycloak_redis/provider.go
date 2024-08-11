@@ -122,3 +122,10 @@ func (p *Provider) AddEndpointSecurity(
 	defer p.m.Unlock()
 	p.endpointSecurity[endpoint] = roles
 }
+
+func (p *Provider) IsEndpointProtected(endpoint string) bool {
+	p.m.RLock()
+	defer p.m.RUnlock()
+	_, ok := p.endpointSecurity[endpoint]
+	return ok
+}
