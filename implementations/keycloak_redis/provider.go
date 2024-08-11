@@ -9,7 +9,6 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"github.com/redis/go-redis/v9"
 	"log/slog"
-	"sync"
 	"time"
 )
 
@@ -25,7 +24,6 @@ type Provider struct {
 	redis            *redis.Client
 	validate         *validator.Validate
 	endpointSecurity map[string][]string
-	m                *sync.RWMutex
 	logger           *slog.Logger
 }
 
@@ -39,7 +37,6 @@ func NewProvider(
 		config:           config,
 		redis:            redis,
 		validate:         validate,
-		m:                &sync.RWMutex{},
 		endpointSecurity: make(map[string][]string),
 		logger:           logger,
 	}
@@ -118,14 +115,10 @@ func (p *Provider) AddEndpointSecurity(
 	endpoint string,
 	roles ...string,
 ) {
-	p.m.Lock()
-	defer p.m.Unlock()
 	p.endpointSecurity[endpoint] = roles
 }
 
 func (p *Provider) IsEndpointProtected(endpoint string) bool {
-	p.m.RLock()
-	defer p.m.RUnlock()
 	_, ok := p.endpointSecurity[endpoint]
 	return ok
 }
