@@ -18,6 +18,7 @@ type AuthProvider interface {
 	DeserializeJwkSet(serializedKey string) (jwk.Set, error)
 	Authorize(ctx context.Context, path string, tokenString string) (models.UserDetails, error)
 	AddEndpointSecurity(endpoint string, roles ...string)
+	IsEndpointProtected(endpoint string) bool
 }
 
 const (
